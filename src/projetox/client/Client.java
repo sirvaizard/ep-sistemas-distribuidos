@@ -9,11 +9,13 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.util.List;
+import java.util.UUID;
 
 public class Client implements PartClient {
 
 	private PartServer server;
 	private Registry reg;
+	private PartInterface currentPart;
 	
 	public Client() throws RemoteException {
 		UnicastRemoteObject.exportObject(this, 0); //with 0 it will use the default port
@@ -40,20 +42,46 @@ public class Client implements PartClient {
 
 	@Override
 	public List<PartInterface> listParts() throws RemoteException {
-		System.out.println("listParts");
-		System.out.println(this.server.test());
+		List<PartInterface> parts = this.server.getAllParts();
+		for (var part : parts) {
+			System.out.printf(
+					"%s %s %s\n",
+					part.getId(),
+					part.getName(),
+					part.getDescription());
+		}
 		return null;
 	}
 
 	@Override
-	public PartInterface getPars(String id) {
-		System.out.println("getPars");
-		return null;
+	public void getPart(String id) {
+		UUID uuid = UUID.fromString(id);
+		try {
+			PartInterface p = (PartInterface) this.server.getPart(uuid);
+			if (p != null) {
+				this.currentPart = p;
+			} else {
+				System.out.println("Part not found.");
+			}
+		} catch (RemoteException remoteException) {
+			remoteException.printStackTrace();
+		}
 	}
 
 	@Override
-	public String showParts() {
-		return null;
+	public void showPart() {
+		if (this.currentPart == null) {
+			System.out.println("No part is selected.");
+		} else {
+			try {
+				System.out.printf("%s %s %s\n",
+						this.currentPart.getId(),
+						this.currentPart.getName(),
+						this.currentPart.getDescription());
+			} catch (RemoteException remoteException) {
+				remoteException.printStackTrace();
+			}
+		}
 	}
 
 	@Override

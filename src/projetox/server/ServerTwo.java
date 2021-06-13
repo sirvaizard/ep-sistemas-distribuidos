@@ -10,21 +10,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Server implements PartServer {
+public class ServerTwo implements PartServer {
 	private final PartRepository repository = new PartRepositoryMemory();
 	private PartInterface part;
-	
-	public Server() throws RemoteException{
+
+	public ServerTwo() throws RemoteException{
 		UnicastRemoteObject.exportObject(this, 0);
 		this.populateRepository();
 	}
 
 	private void populateRepository() {
-		this.repository.insertPart(Part.getInstance("Sv 1:Joia Ancestral do Poder", "100023"));
-		this.repository.insertPart(Part.getInstance("Sv 1:Microfone das Estrelas", "31930"));
-		this.repository.insertPart(Part.getInstance("Sv 1:Lentes Intelectuais", "52147"));
-		this.repository.insertPart(Part.getInstance("Sv 1:Adorno de Unicórnio", "31937"));
-		this.repository.insertPart(Part.getInstance("Sv 1:Peruca das Asinhas Celestes", "31905"));
+		this.repository.insertPart(Part.getInstance("Sv 2:Poção Vermelha", "85426"));
+		this.repository.insertPart(Part.getInstance("Sv 2:Erva Vermelha", "641253"));
+		this.repository.insertPart(Part.getInstance("Sv 2:Banana", "845214"));
+		this.repository.insertPart(Part.getInstance("Sv 2:Bolinhos de Arroz", "320560"));
+		this.repository.insertPart(Part.getInstance("Sv 2:Pão de Carne", "874501"));
 	}
 
 	@Override

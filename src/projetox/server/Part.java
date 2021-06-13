@@ -2,21 +2,33 @@ package projetox.server;
 
 import projetox.shared.PartInterface;
 
-import java.io.Serializable;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.UUID;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Part implements PartInterface, Serializable {
+public class Part extends UnicastRemoteObject implements PartInterface {
     private UUID id;
     private String name;
     private String description;
     private final Map<PartInterface, Integer> subParts = new HashMap<>();
 
-    public Part(String name, String description) {
+    private Part(String name, String description) throws RemoteException {
+        super();
         this.id = UUID.randomUUID();
         this.name = name;
         this.description = description;
+    }
+
+    public static Part getInstance(String name, String description) {
+        try {
+            Part p = new Part(name, description);
+            return p;
+        } catch (RemoteException remoteException) {
+            remoteException.printStackTrace();
+        }
+        return null;
     }
 
     @Override
@@ -27,6 +39,11 @@ public class Part implements PartInterface, Serializable {
     @Override
     public String getName() {
         return this.name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
@@ -47,7 +64,8 @@ public class Part implements PartInterface, Serializable {
     }
 
     @Override
-    public boolean addSubparts(PartInterface p, int quantity) {
+    public boolean addSubpart(PartInterface p, int quantity) {
+        // TODO: Se a parte a ser adiciona já estiver na lista, apenas aumentar a quantidade em 1
         this.subParts.put(p, quantity);
         return true;
     }

@@ -3,6 +3,7 @@ package projetox.server;
 import projetox.shared.PartInterface;
 import projetox.shared.PartRepository;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -16,7 +17,7 @@ public class PartRepositoryMemory implements PartRepository {
     }
 
     @Override
-    public PartInterface getPart(UUID id) {
+    public PartInterface getPart(UUID id) throws RemoteException {
         for (PartInterface product : this.parts) {
             if (product.getId().compareTo(id) == 0) {
                 return product;
