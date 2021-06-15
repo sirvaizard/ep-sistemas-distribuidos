@@ -6,6 +6,7 @@ import java.util.UUID;
 
 public interface PartRepository {
     void insertPart(PartInterface p);
-    PartInterface getPart(UUID id) throws RemoteException;
+    PartInterface getPart(UUID id);
     List<PartInterface> getAllParts();
+    int size();
 }

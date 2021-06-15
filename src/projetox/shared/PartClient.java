@@ -18,10 +18,14 @@ public interface PartClient extends Remote{
 	// Esvazia a lista de sub-pe¸cas corrente.
 	boolean clearList() throws RemoteException;
 	// Adiciona à lista de sub-peças corrente n unidades da peça corrente
-	boolean addSubPart(PartInterface p) throws RemoteException;
+	boolean addSubPart(int quanitity) throws RemoteException;
 	// Adiciona uma pe¸ca ao reposit´orio corrente. A lista de sub-peças corrente é usada como
 	// lista de subcomponentes diretos da nova peça
-	boolean addPart(PartInterface p) throws RemoteException;
+	boolean addPart() throws RemoteException;
 	// Encerra a execução do cliente
 	boolean quit() throws RemoteException;
+	void setCurrentPartName(String name) throws RemoteException;
+	String serverInfo() throws RemoteException;
+	void listAllServers() throws RemoteException;
+	void setSelectedPart() throws RemoteException;
 }

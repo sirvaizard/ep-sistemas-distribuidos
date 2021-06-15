@@ -17,11 +17,20 @@ public class PartRepositoryMemory implements PartRepository {
     }
 
     @Override
-    public PartInterface getPart(UUID id) throws RemoteException {
-        for (PartInterface product : this.parts) {
-            if (product.getId().compareTo(id) == 0) {
-                return product;
+    public int size() {
+        return this.parts.size();
+    }
+
+    @Override
+    public PartInterface getPart(UUID id) {
+        try {
+            for (PartInterface product : this.parts) {
+                if (product.getId().compareTo(id) == 0) {
+                    return product;
+                }
             }
+        } catch (RemoteException remoteException) {
+            remoteException.printStackTrace();
         }
         return null;
     }

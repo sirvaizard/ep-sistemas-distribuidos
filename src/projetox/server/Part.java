@@ -52,6 +52,11 @@ public class Part extends UnicastRemoteObject implements PartInterface {
     }
 
     @Override
+    public String getServerName() {
+        return this.ref.toString();
+    }
+
+    @Override
     public Map<PartInterface, Integer> getSubparts() {
         // TODO: Return copy of list
         return this.subParts;
@@ -65,7 +70,10 @@ public class Part extends UnicastRemoteObject implements PartInterface {
 
     @Override
     public boolean addSubpart(PartInterface p, int quantity) {
-        // TODO: Se a parte a ser adiciona já estiver na lista, apenas aumentar a quantidade em 1
+        boolean alreadySubpart = this.subParts.containsKey(p);
+        if (alreadySubpart) {
+            quantity += this.subParts.get(p);
+        }
         this.subParts.put(p, quantity);
         return true;
     }

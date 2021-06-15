@@ -9,5 +9,6 @@ public interface PartServer extends Remote {
     void insertPart(PartInterface p) throws RemoteException;
     PartInterface getPart(UUID id) throws RemoteException;
     List<PartInterface> getAllParts() throws RemoteException;
-    void clearPartSubparts(UUID id) throws RemoteException;
+    String getName() throws RemoteException;
+    int getNumParts() throws RemoteException;
 }
