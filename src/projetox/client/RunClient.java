@@ -79,6 +79,7 @@ public class RunClient {
 	}
 
 	private static void changeCurrentPart() {
+
 		System.out.print("Part id: ");
 		String partId = scanner.nextLine();
 		client.getPart(partId);

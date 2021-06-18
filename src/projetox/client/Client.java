@@ -20,7 +20,7 @@ public class Client implements PartClient {
 	private PartInterface selectedPart; // É preciso referencia pra 2 peças caso queira inserir uma em outra
 	
 	public Client() throws RemoteException {
-		UnicastRemoteObject.exportObject(this, 0); //with 0 it will use the default port
+		UnicastRemoteObject.exportObject(this, 0); //Port 0 means it'll pick a random available port for RMI service port
 		this.reg = LocateRegistry.getRegistry("localhost", 1099);
 	}
 
@@ -70,7 +70,13 @@ public class Client implements PartClient {
 
 	@Override
 	public void getPart(String id) {
-		UUID uuid = UUID.fromString(id);
+		UUID uuid = null;
+		try{
+			uuid = UUID.fromString(id);
+		}catch (Exception e){
+			System.out.println("Invalid ID");
+		};
+
 		try {
 			PartInterface p = this.server.getPart(uuid);
 			if (p != null) {
@@ -85,6 +91,7 @@ public class Client implements PartClient {
 
 	@Override
 	public void setSelectedPart() {
+		if(this.currentPart == null) System.out.println("Add a current part with the option 4 first...");
 		this.selectedPart = this.currentPart;
 	}
 
@@ -136,7 +143,7 @@ public class Client implements PartClient {
 	@Override
 	public void createPart(String name, String description) {
 		try {
-			this.server.insertPart(name, description);
+			this.server.insertPart(this.server.getName() + ":" + name, description);
 		} catch (RemoteException remoteException) {
 			remoteException.printStackTrace();
 		}
