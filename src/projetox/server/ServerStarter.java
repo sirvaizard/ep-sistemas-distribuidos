@@ -11,6 +11,12 @@ import java.rmi.registry.Registry;
 public class ServerStarter {
 
 	public static void main(String[] args) throws RemoteException, AlreadyBoundException {
+		System.out.println(" ______ _____  __    _____ _         _____  _     _        _ _           _     _");
+		System.out.println("|  ____|  __ \\/_ |  / ____(_)       |  __ \\(_)   | |      (_) |         (_)   | |");
+		System.out.println("| |__  | |__) || | | (___  _ ___    | |  | |_ ___| |_ _ __ _| |__  _   _ _  __| | ___  ___");
+		System.out.println("|  __| |  ___/ | |  \\___ \\| / __|   | |  | | / __| __| '__| | '_ \\| | | | |/ _` |/ _ \\/ __|");
+		System.out.println("| |____| |     | |  ____) | \\__ \\_  | |__| | \\__ \\ |_| |  | | |_) | |_| | | (_| | (_) \\__ \\");
+		System.out.println("|______|_|     |_| |_____/|_|___(_) |_____/|_|___/\\__|_|  |_|_.__/ \\__,_|_|\\__,_|\\___/|___/\n");
 
 		if (args.length < 1) {
 			System.out.println("You should inform a server name: ");

@@ -2,20 +2,20 @@ package projetox.client;
 
 import projetox.shared.PartInterface;
 import projetox.shared.PartClient;
-import projetox.shared.PartServer;
+import projetox.shared.PartRepository;
+
+import java.rmi.NotBoundException;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 public class Client implements PartClient {
 
-	private PartServer server;
-	private Registry reg;
+	private PartRepository server;
+	private final Registry reg;
 	private PartInterface currentPart;
 	private PartInterface selectedPart; // É preciso referencia pra 2 peças caso queira inserir uma em outra
 	
@@ -31,7 +31,7 @@ public class Client implements PartClient {
 		}
 
 		try {
-			return "Server \"" + this.server.getName() + "\" has " + this.server.getNumParts() + " parts.";
+			return "Server \"" + this.server.getName() + "\" has " + this.server.size() + " parts.";
 		} catch (RemoteException remoteException) {
 			remoteException.printStackTrace();
 		}
@@ -41,7 +41,7 @@ public class Client implements PartClient {
 	@Override
 	public void listAllServers() {
 		try {
-			List<String> servers = Arrays.asList(this.reg.list());
+			String[] servers = this.reg.list();
 			for (String server : servers) {
 				System.out.println(server);
 			}
@@ -51,29 +51,21 @@ public class Client implements PartClient {
 	}
 
 	@Override
-	public boolean bind(String serverName) throws RemoteException {
-		try {
-			this.server = (PartServer) reg.lookup(serverName);
-			System.out.println("Found Server \n server:" + this.server);
-			return true;
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-		return false;
+	public void bind(String serverName) throws RemoteException, NotBoundException {
+		this.server = (PartRepository) reg.lookup(serverName);
+		System.out.println("Found Server \n server:" + this.server);
 	}
 
 	@Override
-	public List<PartInterface> listParts() throws RemoteException {
+	public void listParts() throws RemoteException {
 		List<PartInterface> parts = this.server.getAllParts();
 		for (var part : parts) {
 			System.out.printf(
-					"%s %s %s server: %s\n",
+					"%s\t%s\t%s\n",
 					part.getId(),
 					part.getName(),
-					part.getDescription(),
-					part.getServerName());
+					part.getDescription());
 		}
-		return null;
 	}
 
 	@Override
@@ -103,14 +95,15 @@ public class Client implements PartClient {
 		} else {
 			try {
 				System.out.println("Part info: ");
-				System.out.printf(" - %s %s %s server: %s\n",
+				System.out.printf("%s\t%s\t%s\tserver: %s\t%s\n",
 						this.currentPart.getId(),
 						this.currentPart.getName(),
 						this.currentPart.getDescription(),
-						this.currentPart.getServerName());
+						this.currentPart.getServerName(),
+						this.currentPart.isPrimitive() ? "(PRIMITIVE)" : "(NOT PRIMITIVE)");
 				System.out.println("Subparts: ");
 				for (PartInterface key : this.currentPart.getSubparts().keySet()) {
-					System.out.printf(" - %s %s %s quantity: %d",
+					System.out.printf("\t- %s\t%s\t%s\tquantity: %d\n",
 							key.getId(),
 							key.getName(),
 							key.getDescription(),
@@ -123,34 +116,30 @@ public class Client implements PartClient {
 	}
 
 	@Override
-	public boolean clearList() {
+	public void clearList() {
 		try {
 			this.currentPart.clearSubparts();
-			return true;
 		} catch (RemoteException remoteException) {
 			remoteException.printStackTrace();
 		}
-		return false;
 	}
 
 	@Override
-	public boolean addSubPart(int quantity) {
+	public void addSubPart(int quantity) {
 		try {
 			this.selectedPart.addSubpart(this.currentPart, quantity);
 		} catch (RemoteException remoteException) {
 			remoteException.printStackTrace();
 		}
-		return true;
 	}
 
 	@Override
-	public boolean addPart() {
+	public void createPart(String name, String description) {
 		try {
-			this.server.insertPart(this.currentPart);
+			this.server.insertPart(name, description);
 		} catch (RemoteException remoteException) {
 			remoteException.printStackTrace();
 		}
-		return false;
 	}
 
 	@Override
