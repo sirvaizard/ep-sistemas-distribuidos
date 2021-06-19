@@ -27,9 +27,10 @@ public class RunClient {
 					"4 - Change current part\n" +
 					"5 - Show current part\n" +
 					"6 - Clear subparts of current part\n" +
-					"7 - Add subpart to selected part\n" +
-					"8 - Create part into current repository\n" +
-					"9 - Set current part as selected part to add subparts\n" +
+					"7 - Change part name\n" +
+					"8 - Set current part as selected part to add subparts\n" +
+					"9 - Add subpart to selected part\n" +
+					"10 - Create part into current repository\n" +
 					"0 - Exit\n"
 			);
 
@@ -44,10 +45,10 @@ public class RunClient {
 					case 4 -> changeCurrentPart();
 					case 5 -> client.showPart();
 					case 6 -> client.clearList();
-					case 7 -> addSubpart();
-					case 8 -> createPart();
-					case 9 -> client.setSelectedPart();
-					case 10 -> changeName();
+					case 7 -> changeName();
+					case 8 -> client.setSelectedPart();
+					case 9 -> addSubpart();
+					case 10 -> createPart();
 					default -> System.out.println("Invalid command.");
 				}
 			} catch (NullPointerException nullPointerException) {

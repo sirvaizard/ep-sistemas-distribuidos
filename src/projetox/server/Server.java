@@ -16,7 +16,7 @@ public class Server implements PartRepository {
 	public Server(String name) throws RemoteException{
 		this.serverName = name;
 		UnicastRemoteObject.exportObject(this, 0);
-		this.populateRepository();
+		//this.populateRepository();
 	}
 
 	private void populateRepository() {
